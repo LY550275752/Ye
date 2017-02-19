@@ -8,15 +8,18 @@
     }
     Ye.prototype = {
         constructor: Ye,
+        version:'1.0.1'
         length: 0,
         splice: [].splice,
+        sort:[].sort,
+        splice:[].splice,
         selector: '',
         init: function(selector, context) {
             //返回一个空Ye对象
             if (!selector) return this;
 
-            //dom对象，封装为Ye对象
-            if (typeof selector == 'object') {
+            //有nodeType属性，判断为dom对象，封装为Ye对象
+            if (selector.nodeType) {
                 if (selector.length != undefined) {
                     for (var i = 0; i < selector.length; i++) {
                         this[i] = selector[i];
@@ -27,6 +30,7 @@
                     this.length = 1;
                 }
                 return this;
+            //调用ready
             } else if (typeof selector == 'function') {
                 Ye.ready(selector);
                 return;
@@ -35,6 +39,7 @@
             var context = context || doc,
                 elm;
 
+            //判断为id
             if (selector.charAt(0) == '#' && !selector.match('\\s')) {
                 selector = selector.substring(1);
                 elm = document.getElementById(selector);
@@ -43,6 +48,7 @@
                 this[0] = elm;
                 this.length = 1;
                 return this;
+            //判断为class
             } else {
                 elm = context.querySelectorAll(selector);
                 for (var i = 0; i < elm.length; i++) {
@@ -313,6 +319,11 @@
                 }
             }
         },
+        sliblings:function(){
+            var arr = [];
+            sliblings(this[0],arr);
+            return arr;
+        }
     }
     Ye.prototype.init.prototype = Ye.prototype;
 
@@ -417,6 +428,12 @@
         while ((cur = cur[dir]) && cur.nodeType !== 1) {}
         return cur;
     }
+    function sliblings(cur,arr){
+        if(cur.previousSibling){
+            sliblings(cur.previousSibling)
+        }
+        console.log(cur);
+    }
 
     function isArray(obj) {
         return Array.isArray(obj);
@@ -464,5 +481,5 @@
         }
     }
 
-    window.y = Ye;
+    window.$ = Ye;
 })(window, document)
