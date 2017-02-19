@@ -18,7 +18,7 @@
             //返回一个空Ye对象
             if (!selector) return this;
 
-            //有nodeType属性，判断为dom对象，封装为Ye对象
+            //有nodeType属性，判断为dom对象,封装为Ye对象
             if (selector.nodeType) {
                 if (selector.length != undefined) {
                     for (var i = 0; i < selector.length; i++) {
