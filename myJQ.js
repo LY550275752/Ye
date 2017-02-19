@@ -12,7 +12,10 @@
         splice: [].splice,
         selector: '',
         init: function(selector, context) {
+            //返回一个空Ye对象
             if (!selector) return this;
+
+            //dom对象，封装为Ye对象
             if (typeof selector == 'object') {
                 if (selector.length != undefined) {
                     for (var i = 0; i < selector.length; i++) {
