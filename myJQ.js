@@ -367,10 +367,20 @@
     Ye.get = function() {}
     Ye.post = function() {}
     Ye.prototype.extend = Ye.extend = function() {
-        var options = arguments[0];
-        for (var i in options) {
-            this[i] = options[i];
+        if(arguments.length == 1){
+            var options = arguments[0];
+            for (var i in options) {
+                this[i] = options[i];
+            }
+        }else{
+            var target = arguments[0];
+                source = arguments[1];
+            for(var i in source){
+                target[i] = source[i];
+            }
+            return target;
         }
+        
     }
 
     function ajax(options) {
