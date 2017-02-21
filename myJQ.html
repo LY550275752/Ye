@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div class="test topbar">
+		<div class="topContent">
+			<div class="left"></div>
+		</div>
+	</div>
+	<div id="wrap">
+		<div id="box">
+			<ul>
+				<li>111</li>
+				<li>222</li>
+				<li id="li3">333</li>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="left"></div>
+<script src="myJQ.js"></script>
+<script type="text/javascript">
+	var cb = $.Callbacks();
+	var something = true;
+	console.log(cb);
+	function fn1(str){
+		console.log('fn1',str);
+	}
+	cb.add(fn1);
+	cb.fire('开始触发 ： 第一次');
+</script>
+</body>
+</html>

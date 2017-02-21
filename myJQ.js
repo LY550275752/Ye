@@ -8,7 +8,7 @@
     }
     Ye.prototype = {
         constructor: Ye,
-        version:'1.0.1'
+        version:'1.0.1',
         length: 0,
         splice: [].splice,
         sort:[].sort,
@@ -341,7 +341,7 @@
         doc.removeEventListen('DOMContentLoaded', fn, true);
     }
     Ye.ajax = function() {
-        console.log(this);
+        console.log("ajax");
     }
     Ye.each = function(obj, callback) {
         var len = obj.length,
@@ -380,8 +380,140 @@
             }
             return target;
         }
-        
     }
+    //回调列表对象
+    Ye.Callbacks = function(){
+        var list = [], //回调函数数组
+            firing, //是否正在执行
+            firingIndex,
+            firingStart,
+            firingLength,
+
+            add = function(fn){
+                list.push(fn);
+            },
+            fire = function(context ,args){
+                args = args || [];
+                firing = true;
+                firingIndex = firingStart || 0,
+                firingLength = list.length;
+                for(;firingIndex < firingLength; firingIndex++){
+                    list[firingIndex].apply(context,args);
+                }
+                firing = false;
+            };
+        var self = {
+            add:function(){
+                if(list){
+                    var length = list.length;
+                    add(arguments[0]);
+                    //如果回调函数列表正在执行，就修正length，使得新加入的也会执行
+                    if(firing){
+                        firingLength = listLength;
+                    }
+                }
+                return this;
+            },
+            remove:function(){
+                var args = arguments,
+                    argsIndex = 0,
+                    argsLen = arguments.length;
+                for(; argsIndex < argsLen; argsIndex++){
+                    for(var i = 0; i < list.length; i++){
+                        if(args[argsIndex] === list[i]){
+                            //找到了，准备移除
+                            if(argsIndex <= firingLength){
+                                firingLength--;
+                                if( i <= firingIndex){
+                                    firingIndex--;
+                                }
+                            }
+                            list.splice(i--,1);
+                        }
+                    }
+                }
+                return this;
+            },
+            empty:function(){},
+            lock:function(){},
+            fire:function(){
+                fire(this,arguments);
+                return this;
+            }
+        }
+        return self;
+    }
+
+    /**************
+      * 异步队列模块
+    *********/
+    Ye.extend({
+        Deferred:function(func){
+            var doneList = Ye.Callbacks(),
+                failList = Ye.Callbacks(),
+                progressList = Ye.Callbacks(),
+                state = "pending",
+                lists = {
+                    //后面通过each来遍历增加方法，简化代码
+                    resolve:doneList,
+                    reject:failList,
+                    notify:progressList
+                },
+                //异步队列的只读对象
+                promise = {
+                    done:doneList.add,
+                    fail:failList.add,
+                    progress:progressList.add,
+                    state:function(){
+                        return state;
+                    },
+                    then:function(doneCallbacks,failCallbacks,progressCallbacks){
+                        deferred.done(doneCallbacks).fail(failCallbacks).progress(progressCallbacks);
+                        return this;
+                    },
+                    always:function(){
+                        deferred.done(arguments).fail(arguments);
+                        return this;
+                    },
+                    promise:function(obj){
+                        if(obj == null){
+                            obj = promise;
+                        }else{
+                            for(var key in promise){
+                                obj[key] = promise[key]
+                            }
+                        }
+                        return obj;
+                    }
+                },
+                deferred = promise.promise({}),
+                key;
+                //把只读promise放到异步队列里
+                for(var key in lists){
+                    deferred[key] = lists[key].fire,
+                    deferred[key + "With"] = lists[key].fierWith;
+                }
+
+                //添加修改状态回调函数
+                deferred.done(function(){
+                    state = "resolved";
+                }).fail(function(){
+                    state = "rejected";
+                })
+
+                if(func){
+                    func.call(deferred,deferred)
+                }
+
+                return deferred;
+        },
+        when:function(func){
+
+        }
+    })
+    /**************
+       * 异步队列模块结束
+    *********/
 
     function ajax(options) {
         var defaultOptions = {
