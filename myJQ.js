@@ -64,12 +64,16 @@
         },
         //得到的dom都按数组来处理,所以都需要for
         hasClass: function(cls) {
-            var reg = new RegExp('\\s|^' + cls + '\\s|$'),
+            var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)'),
                 arr = [];
             for (var i = 0; i < this.length; i++) {
-                if (this[i].className.match(reg)) arr.push(true);
-                else arr.push(false);
+                if (this[i].className.match(reg)) {
+                    arr.push(true);
+                }else{
+                    arr.push(false);
+                } 
             }
+            console.log(arr);
             if (arr.indexOf(true) != -1) return true;
             else return false;
         },
@@ -176,12 +180,12 @@
             return new Ye(this[0]);
         },
         last: function() {
-            var len = this.length - 1;
-            return new Ye(this[len]);
+            var num = this.length - 1;
+            return new Ye(this[num]);
         },
         eq: function(num) {
             var num = num < 0 ? (this.length - 1) : num;
-            return new Ye(num);
+            return new Ye(this[num]);
         },
         get: function(num) {
             var num = num < 0 ? (this.length - 1) : num;
@@ -227,7 +231,7 @@
                 //无三个参数
                 for (var i = 0; i < this.length; i++) {
                     if (!this[i].guid) {
-                        this[i].guid = ++Ye.guid;
+                        this[i].guid = ++Ye.guid;  
                         //给这个guid下创建一个新事件,存储这个DOM上的所有事件
                         Ye.Events[Ye.guid] = {};
                         //把事件存进这个事件类型数组

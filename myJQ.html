@@ -19,18 +19,19 @@
 			</ul>
 		</div>
 	</div>
-	
 	<div class="left"></div>
 <script src="myJQ.js"></script>
 <script type="text/javascript">
-	var cb = $.Callbacks();
-	var something = true;
-	console.log(cb);
-	function fn1(str){
-		console.log('fn1',str);
+	function n2f(el){
+		var f = document.createDocumentFragment(),child;
+		while( child = el.firstChild){
+			//取第一个加到最后，就会一个个往后跳
+			f.appendChild(child);
+		}
+		return f;
 	}
-	cb.add(fn1);
-	cb.fire('开始触发 ： 第一次');
+	var box = document.getElementById("box");
+	var bf = n2f(box);
 </script>
 </body>
 </html>
