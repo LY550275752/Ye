@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		.left{
+			width:100px;
+			height:100px;
+			background-color: #111;
+		}
+		#box2{
+			width:100px;
+			height:100px;
+			background-color:red;
+		}
+	</style>
+</head>
+<body>
+	<div class="test topbar">
+		<div class="topContent">
+			<div class="left"></div>
+		</div>
+	</div>
+	<div id="wrap">
+		<div id="box">
+			<ul>
+				<li>111</li>
+				<li>222</li>
+				<li id="li3">333</li>
+			</ul>
+		</div>
+	</div>
+	<div class="left" id="box1"></div>
+	<div id="box2"></div>
+<script src="events.js"></script>
+<script type="text/javascript">
+	//执行绑定的开始时间戳和结束时间戳
+	var start,end;
+	//触发事件，执行的开始时间戳和结束时间戳
+	var addStart,addEnd;
+
+	var b1 = document.getElementById('box1');
+	var b2 = document.getElementById("box2");
+	
+	addStart = new Date().getTime();
+	b1.addEventListener('click',function(e){
+		start = new Date();
+		console.log("开始执行");
+	},false)
+	for(var i = 0; i < 3000; i++){
+		b1.addEventListener('click',function(e){
+			console.log("重复addEventListener绑定");
+		});
+	}
+	b1.addEventListener('click',function(e){
+		console.log("结束执行")
+		end = new Date();
+		console.log("第一种方法执行时间",end.getTime() - start.getTime());
+	})
+	addEnd = new Date().getTime();
+	console.log('使用重复addEventListener绑定消耗事件：',addEnd - addStart);
+
+
+
+	addStart = new Date().getTime();
+	var events = [];
+	for(var i = 0; i < 3000; i++){
+		events.push(function(){
+			console.log("使用数组缓存fn");
+		})
+	}
+	b2.addEventListener('click',function(e){
+		var target = e.target;
+		start = new Date();
+		for(var i = 0; i < events.length; i++){
+			events[i].call(target,e);
+		}
+		end = new Date();
+		console.log("使用数组执行时间",end.getTime() - start.getTime());
+	})
+	addEnd = new Date().getTime();
+	console.log("使用数组缓存消耗时间：",addEnd - addStart);
+</script>
+</body>
+</html>

@@ -3,6 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
+	<style>
+		.left{
+			width:100px;
+			height:100px;
+			background-color: #111;
+		}
+	</style>
 </head>
 <body>
 	<div class="test topbar">
@@ -19,19 +26,16 @@
 			</ul>
 		</div>
 	</div>
-	<div class="left"></div>
+	<div class="left" id="l_box"></div>
 <script src="Ye.js"></script>
 <script type="text/javascript">
-	function n2f(el){
-		var f = document.createDocumentFragment(),child;
-		while( child = el.firstChild){
-			//取第一个加到最后，就会一个个往后跳
-			f.appendChild(child);
-		}
-		return f;
-	}
-	var box = document.getElementById("box");
-	var bf = n2f(box);
+	var lBox = document.getElementById('l_box');
+	lBox.addEventListener('click',function(e){
+		console.log("绑定的第一个");
+	},false)
+	lBox.addEventListener('click',function(e){
+		console.log("绑定的第二个");
+	})
 </script>
 </body>
 </html>

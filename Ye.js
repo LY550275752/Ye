@@ -590,7 +590,6 @@
     }
 
     function bind(dom, type, guid) {
-        console.log(dom, type, guid);
         dom.addEventListener(type, function(e) {
             for (var i = 0; i < Ye.Events[guid][type].length; i++) {
                 Ye.Events[guid][type][i].call(dom, e);
