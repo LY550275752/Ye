@@ -74,22 +74,23 @@
                 } 
             }
             console.log(arr);
+            console.log(arr.indexOf);
             if (arr.indexOf(true) != -1) return true;
             else return false;
         },
         addClass: function(cls) {
-            var reg = new RegExp('\\s|^') + cls + new RegExp('\\s|$');
+            var reg = new RegExp('\\s|^' + cls + '\\s|$');
             for (var i = 0; i < this.length; i++) {
-                if (!this[i].className.match(reg)) {
+                if (!this[i].className.match(reg)[0]) {
                     this[i].className += " " + cls
                 }
             }
             return this;
         },
         removeClass: function(cls) {
-            var reg = new RegExp('\\s|^') + cls + new RegExp('\\s|$');
+            var reg = new RegExp('\\s|^' + cls + '\\s|$');
             for (var i = 0; i < this.length; i++) {
-                if (this[i].className.match(reg)) {
+                if (this[i].className.match(reg)[0]) {
                     this[i].className = this[i].className.replace(cls, "")
                 }
             }
@@ -104,7 +105,7 @@
                     this[i].style[attr] = val;
                 } else {
                     var self = this[i];
-                    f.each(attr, function(attr, val) {
+                    Ye.each(attr, function(attr, val) {
                         self.cssText += '' + attr + ':' + val + ';';
                     });
                 }
@@ -339,6 +340,7 @@
     Ye.deleId = 0;
 
     Ye.ready = function(fn) {
+        //ie 里使用onreadyState="complete"来兼容
         doc.addEventListener('DOMContentLoaded', function() {
             fn && fn();
         }, false);
@@ -368,8 +370,6 @@
             }
         }
     }
-    Ye.get = function() {}
-    Ye.post = function() {}
     Ye.prototype.extend = Ye.extend = function() {
         if(arguments.length == 1){
             var options = arguments[0];
@@ -571,14 +571,9 @@
     }
 
     function sibling(cur, dir) {
+        //不是元素节点就继续寻找下一个
         while ((cur = cur[dir]) && cur.nodeType !== 1) {}
         return cur;
-    }
-    function sliblings(cur,arr){
-        if(cur.previousSibling){
-            sliblings(cur.previousSibling)
-        }
-        console.log(cur);
     }
 
     function isArray(obj) {

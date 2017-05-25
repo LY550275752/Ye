@@ -20,8 +20,8 @@
 	<div id="wrap">
 		<div id="box">
 			<ul>
-				<li>111</li>
-				<li>222</li>
+				<li id="li1">111</li>
+				<li id="li2">222</li>
 				<li id="li3">333</li>
 			</ul>
 		</div>
@@ -29,13 +29,7 @@
 	<div class="left" id="l_box"></div>
 <script src="Ye.js"></script>
 <script type="text/javascript">
-	var lBox = document.getElementById('l_box');
-	lBox.addEventListener('click',function(e){
-		console.log("绑定的第一个");
-	},false)
-	lBox.addEventListener('click',function(e){
-		console.log("绑定的第二个");
-	})
+console.log($("#li1").next());
 </script>
 </body>
 </html>
